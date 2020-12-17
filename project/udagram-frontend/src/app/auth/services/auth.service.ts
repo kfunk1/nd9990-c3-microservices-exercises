@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../models/user.model';
-import { ApiService } from 'src/app/api/api.service';
+import { ApiAuthService } from './api.service';
 import { catchError, tap } from 'rxjs/operators';
 
 const JWT_LOCALSTORE_KEY = 'jwt';
@@ -12,7 +12,7 @@ const USER_LOCALSTORE_KEY = 'user';
 })
 export class AuthService {
   currentUser$: BehaviorSubject<User> = new BehaviorSubject<User>(null);
-  constructor( private api: ApiService ) {
+  constructor( private api: ApiAuthService ) {
     this.initToken();
   }
 
@@ -32,6 +32,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<any> {
+    console.log('this.api', this.api);
     return this.api.post('/users/auth/login',
               {email: email, password: password})
               .then((res) => {
